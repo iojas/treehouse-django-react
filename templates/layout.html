@@ -43,7 +43,7 @@
           {% else %}
             <ul class="nav navbar-nav navbar-right">
               <li><a href = "{% url 'users:login' %}">Login</a></li>
-              <li><a href = '#'>Sign Up</a></li>
+              <li><a href = "{% url 'users:signup' %}">Sign Up</a></li>
             </ul>
           {% endif %}
         </div><!--/.navbar-collapse -->

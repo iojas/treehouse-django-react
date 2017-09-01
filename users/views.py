@@ -3,9 +3,10 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from django.contrib.auth import logout
-from django.views.generic import FormView
+from django.views.generic import FormView, CreateView
+from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from . import forms
 # Create your views here.
@@ -19,3 +20,8 @@ class LogoutView(LoginRequiredMixin, FormView):
   def form_valid(self, form):
     logout(self.request)
     return HttpResponseRedirect(reverse('home'))
+
+class SignUpView(CreateView):
+  form_class = UserCreationForm
+  template_name = 'users/signup.html'
+  success_url = reverse_lazy('users:dashboard')
