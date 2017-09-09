@@ -9,10 +9,19 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from . import forms
+from django.views import generic
+from braces.views import SelectRelatedMixin
+from django.contrib.auth.models import User
+
 # Create your views here.
 
-def dashboard(req):
-  return render(req, 'users/dashboard.html')
+class dashboard(LoginRequiredMixin, SelectRelatedMixin, generic.TemplateView):
+	model = User
+  	template_name = 'users/dashboard.html'
+  	select_related = ('thoughts',)
+  	def get_objects(self, queryset=None):
+  		return self.request.user
+
 
 class LogoutView(LoginRequiredMixin, FormView):
   form_class = forms.LogoutForm
