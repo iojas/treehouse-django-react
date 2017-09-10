@@ -16,16 +16,16 @@
 			<h2>Recent thoughts:</h2>
 			<div class="list-groups">
 				{% for thoughts in user.thoughts.all %}	
-				<div class="list-group-item">
-					<h4 class="list-group-item-heading">
-						{{thoughts.get_condition_display }}
-						<time class="pull-right small" time='{{thoughts.recorded_at}}'>{{thoughts.recorded_at | date:"SHORT_DATE_FORMAT"}}</time>
-					</h4>
-					{% if thoughts.notes  %}
+					<div class="list-group-item">
+						<h4 class="list-group-item-heading">
+							{{thoughts.get_condition_display }}
+								<time class="pull-right small" time='{{thoughts.recorded_at}}'>{{thoughts.recorded_at | date:"SHORT_DATE_FORMAT"}}</time>
+						</h4>
+						{% if thoughts.notes  %}
 
-					{{ thoughts.notes | linebreaks}}
-					{% endif %}
-				</div>
+							{{ thoughts.notes | linebreaks}}
+						{% endif %}
+					</div>
 				{% endfor %}
 			</div> 
 		</div>
@@ -35,6 +35,15 @@
 		</div>
 	</div>
 
+	<div class="row">
+		<div class="col-md-6">
+			<div class="ct-chart ct-perfect-fourth">
+
+			</div>
+			{% chart_data as email %}
+				{{ email }}
+		</div>		
+	</div>
   </div>
 
   
@@ -43,4 +52,16 @@
 
 {% block js %}
 	<script src="{% static 'js/stretchy.js' %}" async ></script>
+	<script src="{% static 'js/chartist/chartist.min.js' %}" ></script>
+	<script type="text/javascript">
+		{% chart_data as data %}
+		var data = {{data | safe}};
+		new Chartist.Line('.ct-chart', data);
+	</script>
+{% endblock %}
+
+
+
+{% block css %}
+	<link rel="stylesheet" href="{% static 'js/chartist/chartist.min.css' %}" async ></script>
 {% endblock %}

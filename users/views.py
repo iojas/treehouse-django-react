@@ -19,6 +19,7 @@ class dashboard(LoginRequiredMixin, SelectRelatedMixin, generic.TemplateView):
 	model = User
   	template_name = 'users/dashboard.html'
   	select_related = ('thoughts',)
+  	
   	def get_objects(self, queryset=None):
   		return self.request.user
 
