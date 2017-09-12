@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from . import forms
+from .models import *
 from django.views import generic
 from braces.views import SelectRelatedMixin
 from django.contrib.auth.models import User
@@ -35,3 +36,5 @@ class SignUpView(CreateView):
   form_class = UserCreationForm
   template_name = 'users/signup.html'
   success_url = reverse_lazy('users:dashboard')
+
+

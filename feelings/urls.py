@@ -20,11 +20,13 @@ from django.views.generic import TemplateView
 
 from thoughts import urls as thoughts_url
 from users import urls as user_urls
+from groups import urls as groups_urls
 # from thoughts.view import DashboardView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^users/', include(user_urls, namespace = 'users')),
     url(r'^thought/', include(thoughts_url, namespace='thoughts')),
+    url(r'^groups/', include(groups_urls, namespace = 'groups')),
     url(r'^$', TemplateView.as_view(template_name='index.html'), name= 'home'),
 ]

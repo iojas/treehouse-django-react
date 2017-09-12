@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+{% load bootstrap3 %}
+{% block title %} {{ headline }} | {{block.super}} {% endblock %}
+
+{% block content %}
+  <div class = "container">
+    <div class="row">
+      <div class="col-md-6">
+        <h3>{{ headline }}</h3>
+        <form method="POST">
+            {% bootstrap_form form %}
+            {% csrf_token %}
+            <input type="submit" value="Save" class="btn btn-default">
+        </form>
+      </div>
+
+      <div class="col-md-6">
+        <h3> {{ headline }} </h3>
+        {% if object %}
+          <p>
+            {{object.description}}
+          </p>
+        {% else %}
+          <p>
+            <p>Lorem Ipsum, kndskl ,d dvd vsd,.c dlk ev sdnkvnl sdncksdc ksldkdhnsdfsd dskh fsdf lkdsf</p>
+          </p> 
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
