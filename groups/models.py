@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.utils import timezone 
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 
@@ -33,3 +33,23 @@ class Company(Group):
 	class Meta:
 		verbose_name_plural = 'companies'
 
+
+class Invite(models.Model):
+	from_user = models.ForeignKey(User, related_name='%(class)s_created')
+	to_user = models.ForeignKey(User, related_name='%(class)s_received')
+	accepted = models.BooleanField(default=False)
+	uuid = models.CharField(max_length=32, default='')
+
+	class Meta:
+		abstract = True
+
+	def save(self, *args, **kwargs):
+		if not self.pk:
+			self.uuid	= uuid.uuid4().hex
+		super()	.save(*args, **kwargs)
+
+class CompanyInvite(Invite):
+	company = models.ForeignKey(Company, related_name='invites')
+
+class FamilyInvite(Invite):
+	family = models.ForeignKey(Family, related_name='invites')
