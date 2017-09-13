@@ -34,9 +34,35 @@ class Update(LoginRequiredMixin, SetHeadlineMixin,  generic.UpdateView):
   def get_headline(self):
   	return 'Edit' + ' ' + self.object.name
 
-class Detail(LoginRequiredMixin, SetHeadlineMixin,  generic.DetailView):
+class Detail(LoginRequiredMixin, SetHeadlineMixin,  generic.FormView):
   template_name = 'groups/company/detail.html'
   headline = 'detail'
+  form_class = forms.CompanyInviteForm
+
+  def get_success_url(self):
+    self.get_object()
+    return reverse('groups:companies:detail', kwargs={
+        'slug': self.object.slug})
+
+  def  get_object(self):
+    self.object = self.request.user.companies.get(
+        slug = self.kwargs.get('slug')
+      )
+    return self.object
+
   def get_queryset(self):
   	return self.request.user.companies.all()
-  	
+
+  def get_context_data(self, **kwargs):
+    context = super(Detail, self).get_context_data(**kwargs)
+    context['object'] = self.get_object()
+    return context
+
+  def form_valid(self, form):
+    response = super(Detail, self).form_valid(form)
+    CompanyInvite.objects.create(
+        from_user = self.request.user,
+        to_user = form.invitee,
+        company = self.get_object()
+      )
+    return response
