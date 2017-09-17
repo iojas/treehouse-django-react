@@ -5,7 +5,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-
+from uuid import uuid4
+import uuid
 from autoslug import AutoSlugField
 
 # Create your models here.
@@ -45,8 +46,8 @@ class Invite(models.Model):
 
 	def save(self, *args, **kwargs):
 		if not self.pk:
-			self.uuid	= uuid.uuid4().hex
-		super()	.save(*args, **kwargs)
+			self.uuid = uuid.uuid4().hex
+		super(Invite, self)	.save(*args, **kwargs)
 
 class CompanyInvite(Invite):
 	company = models.ForeignKey(Company, related_name='invites')

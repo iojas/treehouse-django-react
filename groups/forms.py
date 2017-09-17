@@ -19,7 +19,7 @@ class CompanyInviteForm(forms.Form):
   def clean_email_or_username(self):
     data = self.cleaned_data['email_or_username']
     try:
-      invitee = User.objects.filter(
+        self.invitee = User.objects.get(
           Q(email=data)|Q(username=data)
       )
     except User.DoesNotExist:
