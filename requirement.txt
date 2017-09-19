@@ -5,6 +5,7 @@ Django==1.11.5
 django-autoslug==1.9.3
 django-bootstrap3==9.0.0
 django-braces==1.11.0
+django-debug-toolbar==1.8
 Markdown==2.6.6
 pycurl==7.43.0
 Pygments==2.1
@@ -13,6 +14,7 @@ pytz==2017.2
 PyYAML==3.11
 scour==0.32
 six==1.10.0
+sqlparse==0.2.3
 ttystatus==0.32
 unity-lens-photos==1.0
 virtualenv==15.1.0
