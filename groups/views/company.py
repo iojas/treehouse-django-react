@@ -66,3 +66,8 @@ class Detail(LoginRequiredMixin, SetHeadlineMixin,  generic.FormView):
         company = self.get_object()
       )
     return response
+
+class Invites (LoginRequiredMixin, generic.ListView):
+  template_name = 'groups/company/invites.html'
+  def get_queryset(self):
+    return self.request.user.companyinvite_received.all()
