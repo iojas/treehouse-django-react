@@ -3,12 +3,19 @@
 {% block title %} Invites | {{block.super}} {% endblock %}
 
 {% block content %}
+<br>
   <div class = "container">
     <div class="row">
       <div class="col-md-6">
-        <ul>
-          {% for invite in invites %}
-            <li><a href="#">{{invite.company}} by {{invite.from_user}}</a></li>
+        <ul class="list-group">
+          {% for invite in object_list %}
+            <li class="list-group-item row">
+              {{invite.company}} by {{invite.from_user}}
+              <div class="pull-right">
+                <a href="#" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
+                <a href="#" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+              </div>
+            </li>
           {% endfor %}
         </ul>
       </div>
