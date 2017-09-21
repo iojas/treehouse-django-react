@@ -9,6 +9,11 @@ from .. import forms
 from ..models import *
 from django.core.urlresolvers import reverse, reverse_lazy
 from braces.views import SetHeadlineMixin
+from django.shortcuts import get_object_or_404
+
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your views here.
 class Create(LoginRequiredMixin, SetHeadlineMixin, generic.CreateView):
@@ -34,20 +39,47 @@ class Update(LoginRequiredMixin, SetHeadlineMixin,  generic.UpdateView):
   def get_headline(self):
   	return 'Edit' + ' ' + self.object.name
 
-class Detail(LoginRequiredMixin, SetHeadlineMixin,  generic.DetailView):
+class Detail(LoginRequiredMixin, SetHeadlineMixin,  generic.FormView):
   template_name = 'groups/family/detail.html'
   headline = 'detail'
+  form_class = forms.FamilyInviteForm
+
   def get_queryset(self):
   	return self.request.user.families.all()
+
+  def get_success_url(self):
+    self.get_object()
+    return reverse('groups:families:detail', kwargs={
+        'slug': self.object.slug})
+
+  def  get_object(self):
+    self.object = self.request.user.families.get(
+        slug = self.kwargs.get('slug')
+      )
+    return self.object
+
+  def get_context_data(self, **kwargs):
+    context = super(Detail, self).get_context_data(**kwargs)
+    context['object'] = self.get_object()
+    return context
+
+  def form_valid(self, form):
+    response = super(Detail, self).form_valid(form)
+    FamilyInvite.objects.create(
+        from_user = self.request.user,
+        to_user = form.invitee,
+        family = self.get_object()
+      )
+    return response
 
 class Invites (LoginRequiredMixin, generic.ListView):
   model = FamilyInvite
   template_name = 'groups/family/invites.html'
   def get_queryset(self):
-    return self.request.user.companyinvite_received.filter(status = 0)
+    return self.request.user.familyinvite_received.filter(status = 0)
 
 class InviteResponse(LoginRequiredMixin, generic.RedirectView):
-  url = reverse_lazy('groups:family:invites')
+  url = reverse_lazy('groups:families:invites')
 
   def get(self, request, *args, **kwargs):
     invite = get_object_or_404(

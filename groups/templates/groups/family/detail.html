@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-
+{% load bootstrap3 %}
 {% block title %} {{ headline }} | {{block.super}} {% endblock %}
 
 {% block content %}
@@ -13,13 +13,18 @@
           {% if user == object.created_by %}
             <hr>
             <a href ="{% url 'groups:families:update' object.slug %}" class="btn btn-default"> Edit </a>
+            <form action="" method="POST">
+              {% csrf_token %}
+              {% bootstrap_field form.email_or_username layout='horizontal' %}
+              <input type="submit" name="Invite!" class="btn btn-default">
+            </form>
           {% endif %}
       </div>
 
       <div class="col-md-6">
           <h3>Members</h3>
           <div class="list-groups">
-          {% for member  in object.members.all %} 
+          {% for member  in object.members.all %}
             <a href='#' class="list-group-item">
               {% if member == object.created_by %}<i class="glyphicon glyphicon-star"></i>{% endif %}
               {{member.get_full_name}}

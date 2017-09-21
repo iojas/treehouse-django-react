@@ -10,7 +10,7 @@
         <ul class="list-group">
           {% for invite in object_list %}
             <li class="list-group-item row">
-              {{invite.company}} by {{invite.from_user}}
+              {{invite.family}} by {{invite.from_user}}
               <div class="pull-right">
                 <a href="{% url 'groups:families:invite_response' code=invite.uuid response='accept' %}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i></a>
                 <a href="{% url 'groups:families:invite_response' code=invite.uuid response='reject' %}" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
