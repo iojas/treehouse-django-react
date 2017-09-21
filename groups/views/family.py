@@ -39,4 +39,33 @@ class Detail(LoginRequiredMixin, SetHeadlineMixin,  generic.DetailView):
   headline = 'detail'
   def get_queryset(self):
   	return self.request.user.families.all()
-  	
+
+class Invites (LoginRequiredMixin, generic.ListView):
+  model = FamilyInvite
+  template_name = 'groups/family/invites.html'
+  def get_queryset(self):
+    return self.request.user.companyinvite_received.filter(status = 0)
+
+class InviteResponse(LoginRequiredMixin, generic.RedirectView):
+  url = reverse_lazy('groups:family:invites')
+
+  def get(self, request, *args, **kwargs):
+    invite = get_object_or_404(
+        FamilyInvite,
+        to_user = request.user,
+        uuid = kwargs.get('code'),
+        status = 0
+      )
+    if kwargs.get('response') == 'accept':
+      invite.status = 1
+    else:
+      invite.status = 2
+
+    invite.save()
+    return super(InviteResponse, self).get(request, *args, **kwargs)
+
+@receiver(post_save, sender = FamilyInvite)
+def join_family(sender, instance, created, **kwargs):
+  if not created:
+    if instance.status == 1:
+      instance.family.members.add(instance.to_user)
