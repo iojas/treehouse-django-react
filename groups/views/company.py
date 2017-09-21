@@ -70,7 +70,7 @@ class Detail(LoginRequiredMixin, SetHeadlineMixin,  generic.FormView):
 class Invites (LoginRequiredMixin, generic.ListView):
   template_name = 'groups/company/invites.html'
   def get_queryset(self):
-    return self.request.user.companyinvite_received.all()
+    return self.request.user.companyinvite_received.filter(status = 0)
 
 class InviteResponse(LoginRequiredMixin, generic.RedirectView):
   url = reverse_lazy('groups:companies:invites')
@@ -87,4 +87,5 @@ class InviteResponse(LoginRequiredMixin, generic.RedirectView):
     else:
       invite.status = 2
 
+    invite.save()  
     return super(InviteResponse, self).get(request, *args, **kwargs)
