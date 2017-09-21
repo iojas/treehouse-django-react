@@ -38,3 +38,6 @@ class FamilyInviteForm(forms.Form):
     except User.DoesNotExist:
       raise ValidationError('No Such User')
     return data
+
+class LeaveForm(forms.Form):
+  pass

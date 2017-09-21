@@ -95,6 +95,28 @@ class InviteResponse(LoginRequiredMixin, generic.RedirectView):
     invite.save()
     return super(InviteResponse, self).get(request, *args, **kwargs)
 
+class Leave(LoginRequiredMixin, SetHeadlineMixin, generic.FormView):
+  form_class = forms.LeaveForm
+  template_name = 'groups/company/form.html'
+  success_url = reverse_lazy('users:dashboard')
+
+  def get_object(self):
+    try:
+      self.object = self.request.user.companies.filter(
+          slug = self.kwargs.get('slug'),
+        ).exclude(created_by =  self.request.user).get()
+    except models.Company.DoesNotExist:
+      raise Http404()
+
+  def get_headline(self):
+    return "leave "
+
+  def form_valid(self, form):
+    self.get_object()
+    self.object.members.remove(self.request.user)
+    return super(Leave, self).form_valid(form)
+
+
 @receiver(post_save, sender = CompanyInvite)
 def join_company(sender, instance, created, **kwargs):
   if not created:
