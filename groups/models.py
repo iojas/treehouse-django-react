@@ -8,7 +8,8 @@ from django.utils.text import slugify
 from uuid import uuid4
 import uuid
 from autoslug import AutoSlugField
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver 
 # Create your models here.
 
 class Group(models.Model):
