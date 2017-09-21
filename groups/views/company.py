@@ -10,6 +10,11 @@ from ..models import *
 from django.core.urlresolvers import reverse, reverse_lazy
 from braces.views import SetHeadlineMixin
 from django.shortcuts import get_object_or_404
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
 # Create your views here.
 class Create(LoginRequiredMixin, SetHeadlineMixin, generic.CreateView):
   form_class = forms.CompanyForm
@@ -87,5 +92,12 @@ class InviteResponse(LoginRequiredMixin, generic.RedirectView):
     else:
       invite.status = 2
 
-    invite.save()  
+    invite.save()
     return super(InviteResponse, self).get(request, *args, **kwargs)
+
+@receiver(post_save, sender = CompanyInvite)
+def join_company(sender, instance, created, **kwargs):
+  if not created:
+    if instance.status == 1:
+      instance.company.members.add(instance.to_user)
+
