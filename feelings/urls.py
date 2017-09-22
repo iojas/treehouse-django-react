@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^thought/', include(thoughts_url, namespace='thoughts')),
     url(r'^groups/', include(groups_urls, namespace = 'groups')),
     url(r'^$', TemplateView.as_view(template_name='index.html'), name= 'home'),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 
 if settings.DEBUG:

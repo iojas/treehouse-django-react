@@ -1,4 +1,5 @@
 {% load static from staticfiles %}
+{% load group_tags %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -41,7 +42,7 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Companies</a>
               <ul class="dropdown-menu">
-                <li><a href="{% url 'groups:companies:invites' %}">Invites</a></li>
+                <li><a href="{% url 'groups:companies:invites' %}">Invites {% invite_badge 'company' %} </a></li>
                 <li><a href="{% url 'groups:companies:create' %}">Create New</a></li>
                 <li role="separator" class="divider"></li>
                 {% for company in user.companies.all %}
@@ -56,7 +57,7 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Families</a>
               <ul class="dropdown-menu">
-              <li><a href="{% url 'groups:families:invites' %}">Invites</a></li>
+                <li><a href="{% url 'groups:families:invites' %}">Invites {% invite_badge 'family' %} </a></li>
                 <li><a href="{% url 'groups:families:create' %}">Create New</a></li>
                 <li role="separator" class="divider"></li>
                 {% for family in user.families.all %}
