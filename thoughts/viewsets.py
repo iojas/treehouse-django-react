@@ -8,3 +8,7 @@ class ThoughtsViewSet(viewsets.ModelViewSet):
 
   def get_queryset(self):
     return self.request.user.thoughts.all()
+
+  # def create(self, request, *args, **kwargs):
+  #   import pdb; pdb.set_trace()
+  #   return super(ThoughtsSerializer, self).create(request, *args, **kwargs)
