@@ -26,11 +26,11 @@ from groups import urls as groups_urls
 # from thoughts.view import DashboardView
 from rest_framework_jwt.views import obtain_jwt_token
 
-from users.serializers import router as user_router
+from users import routers as user_router
 from thoughts import routers as thought_router
 
 api_urlpatterns = [
-    url(r'',include(user_router.urls)),
+    url(r'',include(user_router.router.urls)),
     url(r'',include(thought_router.router.urls)),
 
 ]
